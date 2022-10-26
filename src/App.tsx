@@ -1,13 +1,47 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import cytoscape from "cytoscape";
-import CytoscapeComponent from "react-cytoscapejs";
 import "./App.css";
+import Paper from "@mui/material/Paper";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
 import networkData from "./data/network.json";
+
+interface NodeDetails {
+  name: string;
+}
+
+function SelectedNodeDetails(props: NodeDetails) {
+  return (
+    <div style={{ width: 150, maxWidth: 150 }}>
+      <Card>
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Stop
+          </Typography>
+          <Typography variant="h5" component="div">
+            {props.name}
+          </Typography>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function NodeDetails(props: { node: NodeDetails | null }) {
+  if (props.node != null) {
+    return <SelectedNodeDetails name={props.node.name} />;
+  } else {
+    console.log("Empty node");
+    return <div style={{ width: 150, maxWidth: 150 }}></div>;
+  }
+}
 
 function App() {
   const elements = networkData;
+  const [selectedNode, setSelectedNode] = useState<NodeDetails | null>(null);
   useEffect(() => {
-    var cy = cytoscape({
+    let cy = cytoscape({
       elements: elements as cytoscape.ElementsDefinition,
       container: document.getElementById("graph"),
       style: [
@@ -39,14 +73,19 @@ function App() {
         nodeDimensionsIncludeLabels: true,
       },
     });
-  });
+    cy.on("tap", "node", function(evt) {
+      const node = evt.target;
+      setSelectedNode({ name: node._private.data.label });
+    });
+  }, []);
   return (
     <div className="App">
+      <NodeDetails node={selectedNode} />
       <div
         id="graph"
         style={{
-          width: 2024,
-          height: 1568,
+          width: 1024,
+          height: 768,
           backgroundColor: "#f0efdf",
           margin: "0 auto",
         }}
