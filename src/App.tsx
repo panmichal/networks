@@ -13,17 +13,23 @@ interface NodeDetails {
 
 function SelectedNodeDetails(props: NodeDetails) {
   return (
-    <div style={{ width: 150, maxWidth: 150 }}>
-      <Card>
-        <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Stop
-          </Typography>
-          <Typography variant="h5" component="div">
-            {props.name}
-          </Typography>
-        </CardContent>
-      </Card>
+    <div style={{ flexGrow: 1, maxWidth: 300 }}>
+      <div style={{ marginLeft: 16, marginTop: 16 }}>
+        <Card>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Stop
+            </Typography>
+            <Typography variant="h5" component="div">
+              {props.name}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
@@ -33,7 +39,7 @@ function NodeDetails(props: { node: NodeDetails | null }) {
     return <SelectedNodeDetails name={props.node.name} />;
   } else {
     console.log("Empty node");
-    return <div style={{ width: 150, maxWidth: 150 }}></div>;
+    return <div style={{ flexGrow: 1, maxWidth: 300 }}></div>;
   }
 }
 
